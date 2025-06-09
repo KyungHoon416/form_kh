@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smore 스타일 설문 폼</title>
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f6f7fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="file"], textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .question-block {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background: #fafafa;
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 12px;
+      background: #6c63ff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .add-btn:hover {
+      background: #4f49d3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>설문지 만들기 ✨</h1>
+
+    <!-- 커버 정보 -->
+    <div class="input-group">
+      <label for="formTitle">설문 제목</label>
+      <input type="text" id="formTitle" placeholder="예: 2030 동아리 신청서">
+    </div>
+
+    <div class="input-group">
+      <label for="formSubtitle">부제목</label>
+      <input type="text" id="formSubtitle" placeholder="예: 관심 있는 동아리를 선택해주세요">
+    </div>
+
+    <div class="input-group">
+      <label for="coverImage">커버 이미지 업로드</label>
+      <input type="file" id="coverImage" accept="image/*">
+    </div>
+
+    <hr>
+
+    <!-- 질문 블록 -->
+    <h2>📝 질문</h2>
+    <div id="questionContainer">
+      <!-- 질문 블록이 JS로 추가될 예정 -->
+    </div>
+
+    <button class="add-btn" onclick="addQuestion()">➕ 질문 추가하기</button>
+  </div>
+
+  <script>
+    let questionCount = 0;
+
+    function addQuestion() {
+      questionCount++;
+      const container = document.getElementById('questionContainer');
+
+      const block = document.createElement('div');
+      block.className = 'question-block';
+      block.innerHTML = `
+        <div class="input-group">
+          <label>Q${questionCount}. 질문 내용</label>
+          <input type="text" name="question" placeholder="예: 가장 좋아하는 활동은?">
+        </div>
+        <div class="input-group">
+          <label>보기 1</label>
+          <input type="text" name="option1" placeholder="예: 운동">
+        </div>
+        <div class="input-group">
+          <label>보기 2</label>
+          <input type="text" name="option2" placeholder="예: 독서">
+        </div>
+      `;
+      container.appendChild(block);
+    }
+
+    // 최초 1개 질문 블록 자동 생성
+    window.onload = () => addQuestion();
+  </script>
+
+</body>
+</html>
