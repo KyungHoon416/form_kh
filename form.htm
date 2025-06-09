@@ -2,132 +2,278 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smore 스타일 설문 폼</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smore 스타일 설문폼</title>
+  <link rel="stylesheet" href="form.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Sans+KR&family=Nanum+Gothic&family=Nanum+Myeongjo&family=Pretendard&display=swap" rel="stylesheet">
   <style>
     body {
+      display: flex;
+      flex-direction: row;
       font-family: 'Pretendard', sans-serif;
-      background-color: #f6f7fb;
-      margin: 0;
-      padding: 0;
     }
-
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
+    .main-container {
+      flex: 1;
+      padding-bottom: 40px;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #eee;
       background: white;
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-
-    h1, h2 {
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 14px;
+      font-size: 15px;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .tab-btn.active {
+      color: #6c63ff;
+      font-weight: bold;
+      border-bottom: 3px solid #6c63ff;
+    }
+    .tab-content {
+      padding: 20px;
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .mobile-preview {
+      width: 360px;
+      height: 640px;
+      background: #fff;
+      border: 1px solid #ddd;
+      margin-left: 20px;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: all 0.5s ease;
+    }
+    .mobile-preview.preview-zoom {
+      transform: scale(1.05);
+    }
+    .mobile-preview.preview-slide {
+      animation: slideIn 0.4s ease;
+    }
+    .mobile-preview.preview-fade {
+      animation: fadeIn 0.6s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .mobile-preview h1 {
+      font-size: 20px;
       text-align: center;
+      margin: 20px 0 5px;
     }
-
+    .mobile-preview p {
+      font-size: 14px;
+      text-align: center;
+      margin: 0 0 20px;
+      color: #555;
+    }
+    .mobile-preview button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 20px;
+      background: var(--main-color);
+      color: white;
+      border: none;
+      font-size: 16px;
+      margin-top: 20px;
+    }
     .input-group {
       margin-bottom: 20px;
     }
-
-    label {
+    .input-group label {
       display: block;
-      margin-bottom: 6px;
       font-weight: bold;
-    }
-
-    input[type="text"], input[type="file"], textarea {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    .question-block {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 20px;
-      background: #fafafa;
-    }
-
-    .add-btn {
-      width: 100%;
-      padding: 12px;
-      background: #6c63ff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .add-btn:hover {
-      background: #4f49d3;
+      margin-bottom: 6px;
+      color: #333;
     }
   </style>
 </head>
-<body>
-
-  <div class="container">
-    <h1>설문지 만들기 ✨</h1>
-
-    <!-- 커버 정보 -->
-    <div class="input-group">
-      <label for="formTitle">설문 제목</label>
-      <input type="text" id="formTitle" placeholder="예: 2030 동아리 신청서">
+<body class="theme-purple font-pretendard">
+  <div class="main-container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('style')">스타일</button>
+      <button class="tab-btn" onclick="showTab('cover')">커버</button>
+      <button class="tab-btn" onclick="showTab('question')">문제</button>
+      <button class="tab-btn" onclick="showTab('ending')">엔딩</button>
+      <button class="tab-btn" onclick="showTab('publish')">퍼블리싱</button>
     </div>
 
-    <div class="input-group">
-      <label for="formSubtitle">부제목</label>
-      <input type="text" id="formSubtitle" placeholder="예: 관심 있는 동아리를 선택해주세요">
+    <div id="style" class="tab-content active">
+      <h2>🎨 스타일 설정</h2>
+
+      <div class="input-group">
+        <label>로고 이미지 업로드</label>
+        <input type="file" accept="image/*" onchange="previewLogo(event)">
+      </div>
+
+      <div class="input-group">
+        <label>버튼 스타일</label>
+        <button onclick="setButtonShape('round')">둥글게</button>
+        <button onclick="setButtonShape('soft')">부드럽게</button>
+        <button onclick="setButtonShape('square')">각지게</button>
+      </div>
+
+      <div class="input-group">
+        <label>테마 색상 선택</label>
+        <button onclick="setTheme('purple')">기본</button>
+        <button onclick="setTheme('sky')">하늘</button>
+        <button onclick="setTheme('gray')">회색</button>
+        <button onclick="setTheme('pink')">분홍</button>
+      </div>
+
+      <div class="input-group">
+        <label>강조색 사용자 정의</label>
+        <input type="color" onchange="setCustomMainColor(this.value)">
+      </div>
+
+      <div class="input-group">
+        <label>글꼴 선택</label>
+        <select onchange="setFont(this.value)">
+          <option value="Pretendard">프리텐다드</option>
+          <option value="Nanum Gothic">나눔고딕</option>
+          <option value="Noto Sans KR">노토산스</option>
+          <option value="Nanum Myeongjo">나눔명조</option>
+          <option value="Gowun Dodum">고운돋움</option>
+          <option value="Jua">주아</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>전환 효과</label>
+        <select onchange="setPreviewTransition(this.value)">
+          <option value="">없음</option>
+          <option value="preview-slide">슬라이드</option>
+          <option value="preview-zoom">줌</option>
+          <option value="preview-fade">페이드</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>반응형 뷰</label>
+        <select onchange="setPreviewSize(this.value)">
+          <option value="mobile">모바일</option>
+          <option value="tablet">태블릿</option>
+          <option value="desktop">데스크탑</option>
+        </select>
+      </div>
     </div>
 
-    <div class="input-group">
-      <label for="coverImage">커버 이미지 업로드</label>
-      <input type="file" id="coverImage" accept="image/*">
+    <div id="cover" class="tab-content">
+      <h2>🖼 커버 설정</h2>
+      <div class="input-group">
+        <label>제목</label>
+        <input type="text" oninput="document.getElementById('previewTitle').innerText = this.value" placeholder="설문 제목 입력">
+      </div>
+      <div class="input-group">
+        <label>부제목</label>
+        <input type="text" oninput="document.getElementById('previewSubtitle').innerText = this.value" placeholder="부제목 입력">
+      </div>
+      <div class="input-group">
+        <label>커버 이미지</label>
+        <input type="file" accept="image/*" onchange="previewCover(event)">
+      </div>
     </div>
 
-    <hr>
-
-    <!-- 질문 블록 -->
-    <h2>📝 질문</h2>
-    <div id="questionContainer">
-      <!-- 질문 블록이 JS로 추가될 예정 -->
+    <div id="question" class="tab-content">
+      <h2>📝 문제 설정</h2>
     </div>
 
-    <button class="add-btn" onclick="addQuestion()">➕ 질문 추가하기</button>
+    <div id="ending" class="tab-content">
+      <h2>🎉 엔딩 설정</h2>
+    </div>
+
+    <div id="publish" class="tab-content">
+      <h2>📤 퍼블리싱</h2>
+    </div>
+  </div>
+
+  <div class="mobile-preview" id="previewBox">
+    <img id="previewLogo" style="width:80px; display:block; margin:0 auto;" />
+    <h1 id="previewTitle">설문지</h1>
+    <p id="previewSubtitle">부제목</p>
+    <img id="previewCoverImage" style="max-width: 100%; border: 2px dashed #ccc; border-radius: 10px;" />
+    <button id="previewButton">설문 시작하기</button>
   </div>
 
   <script>
-    let questionCount = 0;
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
 
-    function addQuestion() {
-      questionCount++;
-      const container = document.getElementById('questionContainer');
-
-      const block = document.createElement('div');
-      block.className = 'question-block';
-      block.innerHTML = `
-        <div class="input-group">
-          <label>Q${questionCount}. 질문 내용</label>
-          <input type="text" name="question" placeholder="예: 가장 좋아하는 활동은?">
-        </div>
-        <div class="input-group">
-          <label>보기 1</label>
-          <input type="text" name="option1" placeholder="예: 운동">
-        </div>
-        <div class="input-group">
-          <label>보기 2</label>
-          <input type="text" name="option2" placeholder="예: 독서">
-        </div>
-      `;
-      container.appendChild(block);
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.innerText.includes(tabId)) btn.classList.add('active');
+      });
     }
 
-    // 최초 1개 질문 블록 자동 생성
-    window.onload = () => addQuestion();
-  </script>
+    function previewLogo(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('previewLogo').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
 
+    function previewCover(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('previewCoverImage').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function setButtonShape(shape) {
+      const btn = document.getElementById('previewButton');
+      btn.className = `btn-${shape}`;
+    }
+
+    function setTheme(theme) {
+      document.body.className = `theme-${theme}`;
+    }
+
+    function setCustomMainColor(color) {
+      document.documentElement.style.setProperty('--main-color', color);
+    }
+
+    function setFont(font) {
+      document.body.style.fontFamily = font;
+    }
+
+    function setPreviewTransition(type) {
+      const box = document.getElementById('previewBox');
+      box.className = `mobile-preview ${type}`;
+    }
+
+    function setPreviewSize(size) {
+      const box = document.getElementById('previewBox');
+      if (size === 'mobile') box.style.width = '360px';
+      else if (size === 'tablet') box.style.width = '640px';
+      else if (size === 'desktop') box.style.width = '100%';
+    }
+  </script>
 </body>
 </html>
